@@ -23,7 +23,7 @@ import torchtitan.components.ft as ft
 from torchtitan.config_manager import ConfigManager, JobConfig, TORCH_DTYPE_MAP
 from torchtitan.distributed import utils as dist_utils
 from torchtitan.experiments.flux.dataset.tokenizer import build_flux_tokenizer
-from torchtitan.experiments.flux.mlperf_logging import MLPerfLogger
+from torchtitan.experiments.flux.mlperf_logging_helper import MLPerfLogger
 from torchtitan.experiments.flux.model.autoencoder import load_ae
 from torchtitan.experiments.flux.model.autoencoder_utils import (
     generate_unscaled_latent_from_mean_logvar,

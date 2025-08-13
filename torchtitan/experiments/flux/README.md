@@ -1,5 +1,6 @@
 <div align="center">
 
+## Please see notes on reproducing this workload [./vs-notes.md](./vs-notes.md).
 # FLUX model in torchtitan
 
 [![integration tests](https://github.com/pytorch/torchtitan/actions/workflows/integration_test_8gpu_flux.yaml/badge.svg?branch=main)](https://github.com/pytorch/torchtitan/actions/workflows/integration_test_8gpu_flux.yaml/badge.svg?branch=main)
