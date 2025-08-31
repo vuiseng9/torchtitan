@@ -1,0 +1,44 @@
+DATASET_ROOT=/root/work/dataset
+
+code-flux-vsnotes:
+	code ./torchtitan/experiments/flux/vs-notes.md
+
+code-hf-flux-pipe:
+	code ./torchtitan/experiments/flux/hf_flux.py
+
+show-rootdir:
+	echo "cd ./torchtitan/experiments/flux"
+
+debug-dev:
+	./torchtitan/experiments/flux/debug_run_train.sh
+
+multi-gpu-run-demo:
+	./torchtitan/experiments/flux/demo_run_train.sh
+# code --diff debug_run_train.sh vs demo_run_train.sh
+
+hf-login:
+	huggingface-cli login
+
+dl-autoencoder:
+	python torchtitan/experiments/flux/scripts/download_autoencoder.py \
+		--repo_id black-forest-labs/FLUX.1-dev \
+		--ae_path ae.safetensors
+
+dl-coco-2014-val:
+	sudo apt -y unzip
+	DOWNLOAD_PATH=$(DATASET_ROOT)/coco2014_raw bash ./torchtitan/experiments/flux/scripts/coco-2014-validation-download.sh
+
+dl-wds-coco-2014-val:
+	sudo apt -y git-lfs
+	git clone https://huggingface.co/datasets/vuiseng9/coco2014-val-30k-256x256-wds $(DATASET_ROOT)/coco
+
+make-coco-2014-val-wds:
+	python torchtitan/experiments/flux/scripts/coco_to_webdataset.py \
+		--input-images-dir $(DATASET_ROOT)/coco2014_raw/val2014 \
+		--input-captions-file $(DATASET_ROOT)/coco2014_raw/annotations/captions_val2014.json \
+		--output-dir $(DATASET_ROOT)/coco \
+		--num-samples 29696 \
+		--width 256 \
+		--height 256 \
+		--samples-per-shard 1000 \
+		--output-tsv-file $(DATASET_ROOT)/val2014_30k.tsv

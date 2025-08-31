@@ -5,6 +5,7 @@
 
 import io
 from typing import Any
+from pathlib import Path
 
 import numpy as np
 import PIL
@@ -69,7 +70,7 @@ def _coco_data_processor(
 
 
 DATASETS["coco"] = TextToImageDatasetConfig(
-    path="/dataset/coco",
+    path=str(Path.home() / "work/dataset/coco"),
     loader=lambda path: load_dataset(
         "webdataset",
         split="train",

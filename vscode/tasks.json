@@ -1,0 +1,49 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "launch-torchrun",
+            "type": "shell",
+            "command": "source /root/miniforge3/etc/profile.d/conda.sh && conda activate dc-250831-flux && cd ${workspaceFolder}/torchtitan && make debug-dev",
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": {"regexp": ".*"},
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": ".*",
+                    "endsPattern": "experiments.*",
+                }
+            }
+        },
+        {
+            "label": "preempt-for-world",
+            "type": "shell",
+            "command": "sleep 5"
+            // we dont use background task because we just wait synchronously. following is the way to do background
+            // "command": "sleep 5 && echo \"It should be time to attach debugpy! Let's do it.\"",
+            // "isBackground": true,
+            // "problemMatcher": {
+            //     "pattern": {"regexp": ".*"},
+            //     "background": {
+            //         "activeOnStart": true,
+            //         "beginsPattern": ".*",
+            //         "endsPattern": "attach.*", 
+            //     }
+            // }
+        },
+        {
+            // What is the main idea these sets of prelaunch Tasks?
+            // we launch first task in the background, once it matches torchrun ... experiment, invoke next task
+            // task 2 is just a delay to give time for the first task to finish. because first task may be quiet.
+            // we use a synthetic text cue to proceed to actual launch.json.
+            "label": "launch-torchrun-and-ready-cue",
+            "dependsOn": [
+                "launch-torchrun",
+                "preempt-for-world",
+            ],
+            "dependsOrder": "sequence" 
+            // if parallel, it means both tasks are launched in parallel and either one will trigger 
+            // to launch.json. so sequence is the right one.
+        }
+    ]
+}
