@@ -4,7 +4,7 @@
         {
             "label": "launch-torchrun",
             "type": "shell",
-            "command": "source /root/miniforge3/etc/profile.d/conda.sh && conda activate dc-250901-flux && cd ${workspaceFolder}/torchtitan && make debug-dev",
+            "command": "source /root/miniforge3/etc/profile.d/conda.sh && conda activate dc-250831-flux && cd ${workspaceFolder}/torchtitan && make debug-dev",
             "isBackground": true,
             "problemMatcher": {
                 "pattern": {"regexp": ".*"},

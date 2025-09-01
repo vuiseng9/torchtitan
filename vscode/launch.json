@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "launch torchrun",
+            "name": "launch dev torchrun",
             "type": "debugpy",
             "console": "integratedTerminal",
             "justMyCode": false,
@@ -17,13 +17,37 @@
             "request": "launch",
             "module": "torch.distributed.run", // a.k.a torchrun
             "args": [
-                "--nproc_per_node", "2",
+                "--nproc_per_node", "1",
                 "--local-ranks-filter", "0", // seems like a log filter
                 "--rdzv_backend", "c10d",
                 "--rdzv_endpoint", "127.0.0.1:29500",
                 "--role", "rank",
                 "-m", "torchtitan.experiments.flux.train",
                 "--job.config_file", "./torchtitan/experiments/flux/train_configs/debug_model.toml"
+            ]
+        },
+        {
+            "name": "launch dryrun actual config",
+            "type": "debugpy",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/torchtitan",
+                "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True"
+            },
+            "cwd": "${workspaceFolder}/torchtitan",
+            "request": "launch",
+            "module": "torch.distributed.run", // a.k.a torchrun
+            "args": [
+                "--nproc_per_node", "1",
+                "--local-ranks-filter", "0", // seems like a log filter
+                "--rdzv_backend", "c10d",
+                "--rdzv_endpoint", "127.0.0.1:29500",
+                "--role", "rank",
+                "-m", "torchtitan.experiments.flux.train",
+                "--job.config_file", "./torchtitan/experiments/flux/train_configs/flux_schnell_mlperf_preprocessed.toml",
+                "--training.batch_size", "1",
+                "--training.seed", "1234"
             ]
         },
         {

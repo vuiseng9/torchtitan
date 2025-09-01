@@ -127,7 +127,7 @@ def _coco_data_processor_from_encodings(
 
 
 DATASETS["coco_preprocessed"] = TextToImageDatasetConfig(
-    path="/dataset/coco_preprocessed",
+    path=str(Path.home() / "work/dataset/coco_preprocessed"),
     loader=lambda path: load_from_disk(path),
     data_processor=_coco_data_processor_from_encodings,
 )

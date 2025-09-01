@@ -48,7 +48,8 @@ use `vscode/{launch,tasks}.json` in `<workspace>/.vscode`. Copy or Softlinks wil
 * COCO 2014 Validation Set. According to [mlperf-training](https://github.com/mlcommons/training/tree/master/text_to_image#coco-2014-subset)
     1. (non-recurring)`make dl-coco-2014-val` downloads coco-2014 validation dataset
     2. (non-recurring)`make coco-2014-val-wds` create the validation subset, resize to 256x256 and convert to webdataset
-    3. (Reuse)`make dl-wds-coco-2014-val`
+    3. (reusable)`make dl-preprocessed-coco-2014-val` download the preprocessed (autoencoder embeddings), 60+GB, elapse datapoint, 15+ mins with 30 parallel download
+    4. (reusable)`make dl-wds-coco-2014-val`
 
 ### Launch Single GPU debug
 * F5 on "Attach torchrun"

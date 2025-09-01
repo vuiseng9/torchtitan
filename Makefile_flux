@@ -32,6 +32,9 @@ dl-wds-coco-2014-val:
 	sudo apt install -y git-lfs
 	git clone https://huggingface.co/datasets/vuiseng9/coco2014-val-30k-256x256-wds $(DATASET_ROOT)/coco
 
+dl-preprocessed-coco-2014-val:
+	bash parallel-mlc-r2-downloader.sh -d $(DATASET_ROOT)/coco_preprocessed https://training.mlcommons-storage.org/metadata/flux-1-coco-preprocessed.uri
+
 make-coco-2014-val-wds:
 	python torchtitan/experiments/flux/scripts/coco_to_webdataset.py \
 		--input-images-dir $(DATASET_ROOT)/coco2014_raw/val2014 \
