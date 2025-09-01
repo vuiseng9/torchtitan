@@ -5,15 +5,26 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "hf flux generate",
+            "name": "launch torchrun",
             "type": "debugpy",
-            "request": "launch",
             "console": "integratedTerminal",
             "justMyCode": false,
-            "env": {},
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/torchtitan",
+                "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True"
+            },
             "cwd": "${workspaceFolder}/torchtitan",
-            "program": "torchtitan/experiments/flux/hf_flux.py",
-            "args": []
+            "request": "launch",
+            "module": "torch.distributed.run", // a.k.a torchrun
+            "args": [
+                "--nproc_per_node", "2",
+                "--local-ranks-filter", "0", // seems like a log filter
+                "--rdzv_backend", "c10d",
+                "--rdzv_endpoint", "127.0.0.1:29500",
+                "--role", "rank",
+                "-m", "torchtitan.experiments.flux.train",
+                "--job.config_file", "./torchtitan/experiments/flux/train_configs/debug_model.toml"
+            ]
         },
         {
             "name": "Attach torchrun",
@@ -31,6 +42,17 @@
                 }
             ],
             "justMyCode": false
+        },
+        {
+            "name": "hf flux generate",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {},
+            "cwd": "${workspaceFolder}/torchtitan",
+            "program": "torchtitan/experiments/flux/hf_flux.py",
+            "args": []
         },
         {
             "name": "vs-py",
