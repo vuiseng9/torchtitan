@@ -211,6 +211,17 @@ DATASETS = {
         ),
         data_processor=_cc12m_wds_data_processor,
     ),
+    # Tiny CC12M datasets for quick testing and development
+    "cc12m_tiny": TextToImageDatasetConfig(
+        path="/dataset/cc12m_tiny",
+        loader=lambda path: load_from_disk(path),
+        data_processor=partial(_cc12m_wds_data_processor, include_sample_id=True),
+    ),
+    "cc12m_tiny_preprocessed": TextToImageDatasetConfig(
+        path="/dataset/cc12m_tiny_preprocessed",
+        loader=lambda path: load_from_disk(path),
+        data_processor=_cc12m_data_processor_from_encodings,
+    ),
 }
 
 
