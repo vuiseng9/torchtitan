@@ -24,6 +24,6 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    hf_hub_download("black-forest-labs/FLUX.1-schnell", filename="ae.safetensors", local_dir=os.path.join(args.local_dir, "autoencoder"), token=args.hf_token)
-    snapshot_download("google/t5-v1_1-xxl", local_dir=os.path.join(args.local_dir, "t5"), token=args.hf_token, ignore_patterns="tf_model.h5")
-    snapshot_download("openai/clip-vit-large-patch14", local_dir=os.path.join(args.local_dir, "clip"), token=args.hf_token, ignore_patterns=["*.safetensors", "*.msgpack", "tf_model.h5"])
+    hf_hub_download("black-forest-labs/FLUX.1-schnell", filename="ae.safetensors", local_dir=os.path.join(args.local_dir, "autoencoder"))
+    snapshot_download("google/t5-v1_1-xxl", local_dir=os.path.join(args.local_dir, "t5"), ignore_patterns="tf_model.h5")
+    snapshot_download("openai/clip-vit-large-patch14", local_dir=os.path.join(args.local_dir, "clip"), ignore_patterns=["*.safetensors", "*.msgpack", "tf_model.h5"])
