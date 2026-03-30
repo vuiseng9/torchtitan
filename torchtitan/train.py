@@ -807,4 +807,14 @@ def main(trainer_class: type[Trainer]) -> None:
 
 
 if __name__ == "__main__":
+    DBG_ATTACH = False
+    if int(os.environ.get("DBG_ATTACH", "0")) == 1:
+        DBG_ATTACH = True
+        
+    if DBG_ATTACH and int(os.environ.get("RANK", "0")) == 0:
+        import debugpy
+        debugpy.listen(("127.0.0.1", 5678))
+        # optional (only when you want to pause immediately):
+        print('Waiting for debugger attach...', flush=True)
+        debugpy.wait_for_client()
     main(Trainer)
