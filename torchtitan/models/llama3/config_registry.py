@@ -12,6 +12,7 @@ from torchtitan.components.optimizer import (
     OptimizersInBackwardContainer,
 )
 from torchtitan.components.quantization.float8 import Float8LinearConverter
+from torchtitan.components.quantization.mx import MXFP8Converter
 from torchtitan.components.validate import Validator
 from torchtitan.config import (
     ActivationCheckpointConfig,
@@ -83,27 +84,39 @@ def llama3_debugmodel_opt_in_bwd() -> Trainer.Config:
     return config
 
 
-def llama3_debugmodel_float8() -> Trainer.Config:
+def llama3_debugmodel_float8(emulate=False) -> Trainer.Config:
     config = llama3_debugmodel()
     config.model_converters = ModelConvertersContainer.Config(
         converters=[
             Float8LinearConverter.Config(
                 enable_fsdp_float8_all_gather=True,
                 precompute_float8_dynamic_scale_for_fsdp=True,
+                emulate=emulate,
             ),
         ],
     )
     return config
 
-
 def llama3_debugmodel_float8_emulate() -> Trainer.Config:
+    return llama3_debugmodel_float8(emulate=True)
+
+
+def llama3_debugmodel_mxfp8(emulate=False) -> Trainer.Config:
     config = llama3_debugmodel()
+    # config.compile = CompileConfig(enable=True)
+    config.training.mixed_precision_param = "bfloat16"
     config.model_converters = ModelConvertersContainer.Config(
         converters=[
-            Float8LinearConverter.Config(
-                enable_fsdp_float8_all_gather=True,
-                precompute_float8_dynamic_scale_for_fsdp=True,
-                emulate=True,
+            MXFP8Converter.Config(
+                fqns=[
+                    "attention.wq",
+                    "attention.wk",
+                    "attention.wv",
+                    "attention.wo",
+                    "feed_forward.w1",
+                    "feed_forward.w2",
+                    "feed_forward.w3",
+                ],
             ),
         ],
     )

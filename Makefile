@@ -45,10 +45,16 @@ _train-llama3:
 
 dryrun-llama3-dbgmdl:
 	$(MAKE) _train-llama3 MCFG=llama3_debugmodel DBG=$(DBG)
-	
+
+f8-dryrun-llama3-dbgmdl:
+	$(MAKE) _train-llama3 MCFG=llama3_debugmodel_float8 DBG=$(DBG)
+
 emulate-f8-llama3-dbgmdl:
 	$(MAKE) _train-llama3 MCFG=llama3_debugmodel_float8_emulate DBG=$(DBG)
 
+mxfp8-dryrun-llama3-dbgmdl:
+	$(MAKE) _train-llama3 MCFG=llama3_debugmodel_mxfp8 DBG=$(DBG)
+	
 # --- llama3.1-8b ---
 
 train-llama3.1-8b:
@@ -65,5 +71,9 @@ emulate-f8-llama3.1-8b:
 
 h-train-llama3.1-8b:
 	python -m torchtitan.train --module llama3 --config llama3_8b --help
+
+# source cublaslt_env.sh
+rm-log-cublaslt:
+	rm -f log.cublaslt
 
 # --metrics.enable_wandb
