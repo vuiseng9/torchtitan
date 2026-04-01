@@ -1,11 +1,19 @@
 ngpu ?= $(shell nvidia-smi -L | wc -l)
-dtype ?= float
-torchrun_intra = torchrun --standalone --nproc-per-node
-MASTER_ADDR ?= 10.13.113.101
+# dtype ?= float
+# torchrun_intra = torchrun --standalone --nproc-per-node
+MASTER_ADDR ?= localhost
 MASTER_PORT ?= 29700
 master ?= $(MASTER_ADDR)
 port ?= $(MASTER_PORT)
 DBG ?= 0
+
+# ootb setup
+# 1. optional rebase, add-upstream and rebase-upstream
+# 2. install-from-source
+# 3. install-aux for debugpy
+# 4. login hf
+# 5. dl-llama3.1-tokenizer for tokenizer assets 
+# 6. dryrun-train-llama3.1
 
 add-upstream:
 	git remote add upstream https://github.com/pytorch/torchtitan
