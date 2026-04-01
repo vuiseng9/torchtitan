@@ -141,6 +141,22 @@ def llama3_8b() -> Trainer.Config:
     )
 
 
+def llama3_8b_float8(emulate=False) -> Trainer.Config:
+    config = llama3_8b()
+    config.model_converters = ModelConvertersContainer.Config(
+        converters=[
+            Float8LinearConverter.Config(
+                enable_fsdp_float8_all_gather=True,
+                precompute_float8_dynamic_scale_for_fsdp=True,
+                emulate=emulate,
+            ),
+        ],
+    )
+    return config
+
+def llama3_8b_float8_emulate() -> Trainer.Config:
+    return llama3_8b_float8(emulate=True)
+
 def llama3_70b() -> Trainer.Config:
     return Trainer.Config(
         hf_assets_path="./assets/hf/Llama-3.1-70B",

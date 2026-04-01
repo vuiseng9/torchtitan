@@ -30,13 +30,40 @@ install-from-source:
 install-aux:
 	pip install debugpy
 
+install-ao-nightly:
+	pip install --pre torchao --index-url https://download.pytorch.org/whl/nightly/cu128
+
 dl-llama3.1-tokenizer:
 	# do login hf
 	python scripts/download_hf_assets.py --repo_id meta-llama/Llama-3.1-8B --assets tokenizer 
 
-dryrun-train-llama3.1:
+_train-llama3:
 	# COMM_MODE is empty and will go through normal training with torchrun in bash script
-	DBG_ATTACH=$(DBG) NGPU=$(ngpu) MODULE=llama3 CONFIG=llama3_debugmodel ./run_train.sh
+	DBG_ATTACH=$(DBG) NGPU=$(ngpu) MODULE=llama3 CONFIG=$(MCFG) ./run_train.sh
 
-dbg-dryrun-train-llama3.1:
-	$(MAKE) dryrun-train-llama3.1 DBG=1
+# --- llama3 debug model ---
+
+dryrun-llama3-dbgmdl:
+	$(MAKE) _train-llama3 MCFG=llama3_debugmodel DBG=$(DBG)
+	
+emulate-f8-llama3-dbgmdl:
+	$(MAKE) _train-llama3 MCFG=llama3_debugmodel_float8_emulate DBG=$(DBG)
+
+# --- llama3.1-8b ---
+
+train-llama3.1-8b:
+	$(MAKE) _train-llama3 MCFG=llama3_8b DBG=$(DBG)
+
+dbg-train-llama3.1-8b:
+	$(MAKE) train-llama3.1-8b DBG=1
+
+f8-train-llama3.1-8b:
+	$(MAKE) _train-llama3 MCFG=llama3_8b_float8 DBG=$(DBG)
+
+emulate-f8-llama3.1-8b:
+	$(MAKE) _train-llama3 MCFG=llama3_8b_float8_emulate DBG=$(DBG)
+
+h-train-llama3.1-8b:
+	python -m torchtitan.train --module llama3 --config llama3_8b --help
+
+# --metrics.enable_wandb
