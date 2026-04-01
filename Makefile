@@ -19,10 +19,16 @@ install-from-source:
 	pip install -r requirements.txt
 	pip install --pre torchdata --index-url https://download.pytorch.org/whl/nightly/cpu
 
+install-aux:
+	pip install debugpy
+
 dl-llama3.1-tokenizer:
 	# do login hf
 	python scripts/download_hf_assets.py --repo_id meta-llama/Llama-3.1-8B --assets tokenizer 
 
-local-dryrun-train-llama3.1:
+dryrun-train-llama3.1:
 	# COMM_MODE is empty and will go through normal training with torchrun in bash script
-	NGPU=$(ngpu) MODULE=llama3 CONFIG=llama3_debugmodel ./run_train.sh
+	DBG_ATTACH=$(DBG) NGPU=$(ngpu) MODULE=llama3 CONFIG=llama3_debugmodel ./run_train.sh
+
+dbg-dryrun-train-llama3.1:
+	$(MAKE) dryrun-train-llama3.1 DBG=1
